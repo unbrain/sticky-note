@@ -217,7 +217,8 @@ npm i style-loader css-loader less-loader less --save-dev
 ```JavaScript
   "scripts": {
     "start": "node ./bin/www",
-    "build": "webpack --config webpack.config.js -w"
+    "build": "webpack --config webpack.config.js",
+    "bw": "webpack --config webpack.config.js -w",
   },
 ```
 
