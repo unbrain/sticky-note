@@ -151,7 +151,7 @@ Entrypoint main = index.js
 
 
 
-## 第一个组件 `Toast`
+## 组件 `Toast`
 
 ### `src/js/mod/toast.js`
 
@@ -260,9 +260,40 @@ require('less/toast.less')
 $('body').append(this.$toast)
 ```
 
+## 组件 `EventHub`
 
+```javascript
+var EventHub = (function () {
+  var events = {}
+  //订阅
+  function on(eventName, handler) {
+    events[eventName] = events[eventName] || []
+    events[eventName].push({
+      handler
+    })
+  }
+  //发布
+  function emit(eventName, args) {
+    if (!events[eventName]) {
+      return
+    }
+    for (let i = 0; i < events[eventName].length; i++) {
+      events[eventName][i].handler(args)
+    }
+  }
 
+  return {
+    on,
+    emit
+  }
+})()
 
+module.exports = EventHub
+```
+
+使用发布订阅模式
+
+## 组件 `Waterfall`
 
 [TOC]
 
