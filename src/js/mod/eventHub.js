@@ -10,7 +10,7 @@ var EventHub = (function () {
   //发布
   function emit(eventName, args) {
     if (!events[eventName]) {
-      return
+      return undefined
     }
     for (let i = 0; i < events[eventName].length; i++) {
       events[eventName][i].handler(args)
