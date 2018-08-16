@@ -23,7 +23,7 @@ Note.prototype = {
   defaultOpts: {
     id: '',
     $ct: $('#content').length > 0 ? $('#content') : $('body'),
-    context: 'have a nic day'
+    context: 'have a nice day'
   },
 
   initOpts(opts) {
@@ -53,8 +53,8 @@ Note.prototype = {
   },
 
   setStyle() {
-    let num0 = Math.floor(Math.random()*6);
-    let num1 = Math.floor(Math.random()*6);
+    let num0 = Math.floor(Math.random() * 6);
+    let num1 = Math.floor(Math.random() * 6);
     this.$note.find('.note-head').css('background-color', this.colors[num0])
     this.$note.find('.note-ct').css('background-color', this.colors[num1])
   },
@@ -73,7 +73,7 @@ Note.prototype = {
     var $noteHead = $note.find('.note-head')
     var $noteCt = $note.find('.note-ct')
     var $delete = $note.find('.delete')
-    
+
     $delete.on('click', () => {
       this.delete()
     })

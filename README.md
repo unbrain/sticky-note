@@ -335,9 +335,244 @@ var WaterFall = (function () {
 module.exports = WaterFal
 ```
 
-`js` 实现瀑布流
+`js` 实现瀑布流 [原生js实现瀑布流效果](https://segmentfault.com/a/1190000012621936)
 
 ## 组件 `Note`
+
+```javascript
+require('less/note.less')
+
+var Toast = require('./toast.js').Toast
+var EventHub = require('./eventHub')
+
+function Note(opts) {
+  this.initOpts(opts)
+  this.createNote()
+  this.setStyle()
+  this.bindEvent()
+}
+
+Note.prototype = {
+  colors: [
+    ['#ea9b35', '#efb04e'], // headColor, containerColor
+    ['#dd598b', '#e672a2'],
+    ['#eee34b', '#f2eb67'],
+    ['#c24226', '#d15a39'],
+    ['#c1c341', '#d0d25c'],
+    ['#3f78c3', '#5591d2']
+  ],
+
+  defaultOpts: {
+    id: '',
+    $ct: $('#content').length > 0 ? $('#content') : $('body'),
+    context: 'have a nice day'
+  },
+
+  initOpts(opts) {
+    this.opts = $.extend({}, this.defaultOpts, opts || {})
+    if (this.opts.id) {
+      this.id = this.opts.id
+    }
+  },
+
+  createNote() {
+    let template = `<div class="note">
+      <div class = "note-head" > < span class = "username" > < /span><span class="delete">&times;</span > < /div>
+      <div class="note-ct" contenteditable="true"></div>
+      </div>`
+    this.$note = $(template)
+    this.$note.find('.note-ct').text(this.opts.context)
+    this.$note.find('.username').text(this.opts.username)
+    this.$note.$ct.append(this.$note)
+    if (!$.id) this.note.css('bottom', '10px')
+  },
+
+  setStyle() {
+    let color = this.colors[Math.random() * 6]
+    this.$note.find('.note-head').css('background-color', color[0])
+    this.$note.find('.note-ct').css('background-color', color[1])
+  },
+
+  setLayout() {
+    if (this.clk) {
+      clearTimeout(this.clk)
+    }
+    this.clk = setTimeout(() => {
+      EventHub.emit('waterfall')
+    }, 100)
+  },
+
+  bindEvent() {
+    var $note = this.$note
+    var $noteHead = $note.find('.note-head')
+    var $noteCt = $note.find('.note-ct')
+    var $delete = $note.find('.delete')
+    
+    $delete.on('click', () => {
+      this.delete()
+    })
+
+    $noteCt.on('focus', () => {
+      if ($noteCt.html() === 'have a nice day') $noteCt.html('')
+      $noteCt.data('before', $noteCt.html())
+    }).on('blur paste', () => {
+      if ($noteCt.data('before') != $noteCt.html()) {
+        $noteCt.data('before', $noteCt.html())
+        this.setLayout()
+        if (this.id) {
+          this.edit($noteCt.html())
+        } else {
+          this.add($noteCt.html())
+        }
+      }
+    })
+
+    $noteHead.on('mousedown', (e) => {
+      var evtX = e.pageX - $note.offset().left
+      var evtY = e.pageY - $note.offset().top
+      $note.addClass('draggable').data('evtPos', {
+        x: evtX,
+        y: evtY
+      })
+    }).on('mouseup', () => {
+      $note.removeClass('draggable').removeData('pos')
+    })
+
+    $('body').on('mousemove', (e) => {
+      $('.draggable').length && $('.draggable').offset({
+        top: e.pageY - $('.draggable').data('evtPos').y,
+        left: e.pageX - $('.draggable').data('evtPos').x
+      })
+    })
+  },
+
+  edit(msg) {
+    $.post('/api/notes/edit', {
+      id: this.id,
+      note: msg
+    }).done((ret) => {
+      if (ret.status === 0) {
+        Toast('update success')
+      } else {
+        Toast(ret.errorMsg)
+      }
+    })
+  },
+
+  add() {
+    console.log('adding...')
+    $.post('/api/notes/add', {
+        note: msg
+      })
+      .done((ret) => {
+        if (ret.status === 0) {
+          Toast('add success')
+        } else {
+          this.$note.remove()
+          EventHub.emit('waterfall')
+          Toast(ret.errorMsg)
+        }
+      })
+
+  },
+
+  delete() {
+    $.post('/api/notes/delete', {
+        id: this.id
+      })
+      .done((ret) => {
+        if (ret.status === 0) {
+          Toast('delete success');
+          this.$note.remove()
+          EventHub.emit('waterfall')
+        } else {
+          Toast(ret.errorMsg)
+        }
+      })
+  }
+}
+
+
+module.exports.Note = Note
+```
+
+## 组件 `noteManager`
+
+```javascript
+let Toast = require('./toast').Toast
+let Note = require('./note').Note
+let EventHub = require('./eventHub')
+
+let NoteManager = (function () {
+  function load() {
+    $get('/api/notes').done((ret) => {
+        if (ret.status === 0) {
+          $.each(ret.data, (index, article) => {
+            new Note({
+              id: article.id,
+              context: article.text,
+              username: article.username
+            })
+          })
+
+          EventHub.emit('waterfall')
+        } else {
+          Toast(ret.errorMsg)
+        }
+      })
+      .fail(function () {
+        Toast('404');
+      })
+  }
+
+  function add() {
+    new Note()
+  }
+
+  return {
+    load,
+    add
+  }
+})()
+
+module.exports.NoteManager = NoteManager
+```
+
+
+
+## `note` 增删改查路由
+
+| 操作      | 发送                         | 接收                                       |
+| :------ | :------------------------- | :--------------------------------------- |
+| 查询/get  | /api/notes                 | {status:0,data:[{},]}{status:1,errorMsg} |
+| 增加/post | /api/notes/add  {msg}      | {status:0}{status:1,errorMsg}            |
+| 删除/post | /api/notes/delete  {id}    | {status:0}{status:1,errorMsg}            |
+| 修改/post | /api/notes/edit  {id, msg} | {status:0}{status:1,errorMsg}            |
+
+```javascript
+var express = require('express');
+var router = express.Router();
+
+/* GET listing. */
+router.get('/notes', function(req, res, next) {
+  console.log('query...');
+});
+
+/* POST listing. */ 
+router.post('/notes/add', function(req, res, next) {
+  console.log('add...');
+});
+
+router.post('/notes/delete', function(req, res, next) {
+  console.log('delete...');
+});
+
+router.post('/notes/edit', function(req, res, next) {
+  console.log('edit...');
+});
+
+module.exports = router;
+```
 
 
 
