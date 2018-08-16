@@ -4,7 +4,7 @@ let EventHub = require('./eventHub')
 
 let NoteManager = (function () {
   function load() {
-    $get('/api/notes').done((ret) => {
+    $.get('/api/notes').done((ret) => {
         if (ret.status === 0) {
           $.each(ret.data, (index, article) => {
             new Note({

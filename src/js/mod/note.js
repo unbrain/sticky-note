@@ -34,21 +34,29 @@ Note.prototype = {
   },
 
   createNote() {
-    let template = `<div class="note">
-      <div class = "note-head" > < span class = "username" > < /span><span class="delete">&times;</span > < /div>
-      <div class="note-ct" contenteditable="true"></div>
-      </div>`
+    let template = `
+    <div class="note">
+      <div class="note-head">
+        <span class="username">
+        </span>
+        <span class="delete">&times;
+        </span>
+      </div>
+      <div class="note-ct" contenteditable="true">
+      </div>
+    </div>`
     this.$note = $(template)
     this.$note.find('.note-ct').text(this.opts.context)
     this.$note.find('.username').text(this.opts.username)
-    this.$note.$ct.append(this.$note)
-    if (!$.id) this.note.css('bottom', '10px')
+    this.opts.$ct.append(this.$note)
+    if (!$.id) this.$note.css('bottom', '10px')
   },
 
   setStyle() {
-    let color = this.colors[Math.random() * 6]
-    this.$note.find('.note-head').css('background-color', color[0])
-    this.$note.find('.note-ct').css('background-color', color[1])
+    let num0 = Math.floor(Math.random()*6);
+    let num1 = Math.floor(Math.random()*6);
+    this.$note.find('.note-head').css('background-color', this.colors[num0])
+    this.$note.find('.note-ct').css('background-color', this.colors[num1])
   },
 
   setLayout() {
