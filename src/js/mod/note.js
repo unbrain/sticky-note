@@ -53,10 +53,9 @@ Note.prototype = {
   },
 
   setStyle() {
-    let num0 = Math.floor(Math.random() * 6);
-    let num1 = Math.floor(Math.random() * 6);
-    this.$note.find('.note-head').css('background-color', this.colors[num0])
-    this.$note.find('.note-ct').css('background-color', this.colors[num1])
+    let color = this.colors[Math.floor(Math.random() * 6)]
+    this.$note.find('.note-head').css('background-color', color[0])
+    this.$note.find('.note-ct').css('background-color', color[1])
   },
 
   setLayout() {
