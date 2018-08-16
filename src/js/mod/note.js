@@ -1,6 +1,6 @@
 require('less/note.less')
 
-var Toast = require('./toast.js').Toast
+var Toast = require('./toast').Toast
 var EventHub = require('./eventHub')
 
 function Note(opts) {
@@ -65,7 +65,7 @@ Note.prototype = {
     var $noteHead = $note.find('.note-head')
     var $noteCt = $note.find('.note-ct')
     var $delete = $note.find('.delete')
-
+    
     $delete.on('click', () => {
       this.delete()
     })
@@ -133,7 +133,7 @@ Note.prototype = {
       })
 
   },
-  
+
   delete() {
     $.post('/api/notes/delete', {
         id: this.id
