@@ -125,7 +125,6 @@ Note.prototype = {
   },
 
   add(msg) {
-    console.log('adding...')
     $.post('/api/notes/add', {
         note: msg
       })
