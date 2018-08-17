@@ -4,7 +4,7 @@ var WaterFall = (function () {
 
   function render($c) {
     $ct = $c
-    $items = $ct.children()
+    $items = $ct.children() || []
 
     var nodeWidth = $items.outerWidth(true)
     var colNum = parseInt($(window).width() / nodeWidth)

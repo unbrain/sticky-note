@@ -30,14 +30,14 @@ const sequelize = new Sequelize(undefined, undefined, undefined, {
 const Note = sequelize.define('note', {
   text: {
     type: Sequelize.STRING
+  },
+  username: {
+    type: Sequelize.STRING
   }
 })
 
-// Note.sync({force: true}).then(() => {
-//   // Table created
-//   return Note.create({
-//     text: 'test',
-//   });
-// });
-
+//Note.sync({force: true})
+Note.findAll({raw:true}).then((notes) => {
+  console.log(notes)
+})
 module.exports.Note = Note
