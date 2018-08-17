@@ -28,7 +28,8 @@ router.post('/notes/delete', function(req, res, next) {
 });
 
 router.post('/notes/edit', function(req, res, next) {
-  Note.update({text: req.body.note}, {where: {id: req.body.is}}).then(()=>{
+  let body = req.body
+  Note.update({text: body.note}, {where: {id: body.id).then(()=>{
     console.log(arguments)
     res.send({status:0})
   }).catch(()=>{
