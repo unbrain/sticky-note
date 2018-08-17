@@ -125,18 +125,18 @@ Note.prototype = {
   },
 
   add(msg) {
-    $.post('/api/notes/add', {
-        note: msg
-      })
-      .done((ret) => {
-        if (ret.status === 0) {
-          Toast('add success')
-        } else {
-          this.$note.remove()
-          EventHub.emit('waterfall')
-          Toast(ret.errorMsg)
+    msg = msg + ''
+    var self = this;
+    $.post('/api/notes/add', {note: msg})
+      .done(function(ret){
+        if(ret.status === 0){
+          Toast('add success');
+        }else{
+          self.$note.remove();
+          Event.fire('waterfall')
+          Toast(ret.errorMsg);
         }
-      })
+      });
 
   },
 
