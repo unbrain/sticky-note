@@ -181,7 +181,7 @@ eval("module.exports = function(module) {\n\tif (!module.webpackPolyfill) {\n\t\
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function($) {var NoteManager = __webpack_require__(/*! mod/noteManager */ \"./src/js/mod/noteManager.js\").NoteManager;\nvar EventHub = __webpack_require__(/*! mod/eventHub */ \"./src/js/mod/eventHub.js\");\nvar WaterFall = __webpack_require__(/*! mod/waterfall */ \"./src/js/mod/waterfall.js\");\n\nNoteManager.load();\n\n$('#addmy').on('click', function () {\n  NoteManager.add();\n})\n\nEventHub.on('waterfall', function () {\n  WaterFall.render($('#content'));\n})\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./src/js/libs/jquery-2.0.3.min.js\")))\n\n//# sourceURL=webpack:///./src/js/app/index.js?");
+eval("/* WEBPACK VAR INJECTION */(function($) {var NoteManager = __webpack_require__(/*! mod/noteManager */ \"./src/js/mod/noteManager.js\").NoteManager;\nvar EventHub = __webpack_require__(/*! mod/eventHub */ \"./src/js/mod/eventHub.js\");\nvar WaterFall = __webpack_require__(/*! mod/waterfall */ \"./src/js/mod/waterfall.js\");\n\nNoteManager.load();\n\n$('#addmy').on('click', function () {\n  NoteManager.add();\n})\n\nEventHub.on('waterfall', function () {\n  WaterFall.render($('#content'));\n})\n\ndocument.addEventListener('scroll', () => {\n  console.log(1);\n  \n  if (window.scrollY == 0) {\n    $('#header').removeClass('active')\n  } else {\n    $('#header').addClass('active')\n  }\n})\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./src/js/libs/jquery-2.0.3.min.js\")))\n\n//# sourceURL=webpack:///./src/js/app/index.js?");
 
 /***/ }),
 

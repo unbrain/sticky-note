@@ -1,7 +1,5 @@
 html,
 body {
-  height: 100%;
-  overflow: auto;
   background: rgb(246, 248, 250);
   font: 14px/1.4 'Arial';
 }
@@ -34,7 +32,15 @@ a {
   padding: 24px 36px;
   font-size: 12px;
   background-color: #fff;
+  transition: 1s;
+}
+
+#header.active {
+  padding: 20px 36px;
+  position: fixed;
   box-shadow: 10px 10px 10px -6px rgba(0, 0, 0, 0.22);
+  transition: 1s;
+  z-index: 1;
 }
 
 #header a {
@@ -57,8 +63,6 @@ a {
   display: block;
   margin-top: 6px;
 }
-
-
 
 #header .setting {
   float: right;
@@ -247,7 +251,7 @@ a {
   font-size: 18px;
 }
 
-#content{
+#content {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
