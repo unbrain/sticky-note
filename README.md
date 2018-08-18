@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-express less webpack jQuery
+express less webpack jQuery sqlite
 
 ## 项目初始化
 
@@ -569,6 +569,222 @@ router.post('/notes/delete', function(req, res, next) {
 
 router.post('/notes/edit', function(req, res, next) {
   console.log('edit...');
+});
+
+module.exports = router;
+```
+
+## 使用 `sqlite`
+
+`model/note.js`
+
+```javascript
+const Sequelize = require('sequelize');
+const path = require('path')
+const sequelize = new Sequelize(undefined, undefined, undefined, {
+  host: 'localhost',
+  dialect: 'sqlite',
+  storage: path.join(__dirname, '../db/database.sqlite'),
+});
+
+const Note = sequelize.define('note', {
+  text: {
+    type: Sequelize.STRING
+  }
+})
+
+module.exports.Note = Note
+```
+
+## 登陆路由
+
+`routes/auth.js`
+
+```JavaScript
+var express = require('express');
+var router = express.Router();
+
+var passport = require('passport');
+var GitHubStrategy = require('passport-github').Strategy;
+
+passport.serializeUser(function (user, done) {
+  console.log('---serializeUser---')
+  console.log(user)
+  done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+  console.log('---deserializeUser---')
+  console.log(obj);
+  done(null, obj);
+});
+
+
+passport.use(new GitHubStrategy({
+    clientID: 'dd06c1133c9ecd1f3953',
+    clientSecret: '98de18447c6a0d5031688da283c3317cb6801f94',
+    callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+  },
+  function (accessToken, refreshToken, profile, done) {
+    // User.findOrCreate({ githubId: profile.id }, function (err, user) {
+    // });
+    done(null, profile);
+  }
+));
+
+router.get('/logout', function (req, res) {
+  req.session.destroy();
+  res.redirect('/');
+})
+
+router.get('/github',
+  passport.authenticate('github'));
+
+router.get('/github/callback',
+  passport.authenticate('github', {
+    failureRedirect: '/login'
+  }),
+  function (req, res) {
+    req.session.user = {
+      id: req.user.id,
+      username: req.user.displayName || req.user.username,
+      avatar: req.user._json.avatar_url,
+      provider: req.user.provider
+    };
+    res.redirect('/');
+  });
+
+module.exports = router;
+```
+
+## 主页路由
+
+`routes/index.js`
+
+```javascript
+var express = require('express');
+var router = express.Router();
+
+/* GET home page. */
+router.get('/', function (req, res, next) {
+  var data;
+  if (req.session.user) {
+    data = {
+      isLogin: true,
+      user: req.session.user
+    }
+  } else {
+    data = {
+      isLogin: false
+    }
+  }
+  console.log(data)
+  res.render('index', data);
+});
+
+module.exports = router;
+```
+
+## 修改请求路由
+
+`routes/api.js`
+
+```javascript
+var express = require('express');
+var router = express.Router();
+var Note = require('../model/note').Note
+
+/* GET listing. */
+router.get('/notes', function (req, res, next) {
+  Note.findAll({
+    raw: true
+  }).then((note) => {
+    res.send({
+      status: 0,
+      data: note
+    })
+  })
+});
+
+/* POST listing. */
+router.post('/notes/add', (req, res, next) => {
+  if (!req.session.user) {
+    return res.send({
+      status: 1,
+      errorMsg: '请先登录'
+    })
+  }
+  let note = req.body.note
+  let username = req.session.user.username
+  console.log({
+    text: note,
+    username: username
+  })
+  Note.create({
+    text: note,
+    username
+  }).then(() => {
+    res.send({
+      status: 0
+    })
+  }).catch(() => {
+    res.send({
+      status: 1,
+      errorMsg: '数据库出错'
+    })
+  })
+});
+
+router.post('/notes/delete', (req, res, next) => {
+  if (!req.session.user) {
+    return res.send({
+      status: 1,
+      errorMsg: '请先登录'
+    })
+  }
+  let username = req.session.user.username
+  Note.destroy({
+    where: {
+      id: req.body.id,
+      username: username
+    }
+  }).then(() => {
+    res.send({
+      status: 0
+    })
+  }).catch(() => {
+    res.send({
+      status: 1,
+      errorMsg: '数据库错误'
+    })
+  })
+});
+
+router.post('/notes/edit', function (req, res, next) {
+  if (!req.session.user) {
+    return res.send({
+      status: 1,
+      errorMsg: '请先登录'
+    })
+  }
+  let body = req.body
+  let username = req.session.user.username
+  Note.update({
+    text: body.note
+  }, {
+    where: {
+      id: body.id,
+      username: username
+    }
+  }).then(() => {
+    res.send({
+      status: 0
+    })
+  }).catch(() => {
+    res.send({
+      errorMsg: '服务器错误'
+    })
+  })
 });
 
 module.exports = router;

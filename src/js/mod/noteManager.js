@@ -7,10 +7,12 @@ let NoteManager = (function () {
     $.get('/api/notes').done((ret) => {
         if (ret.status === 0) {
           $.each(ret.data, (index, article) => {
+            let time = new Date()
             new Note({
               id: article.id,
               context: article.text,
-              username: article.username
+              username: article.username,
+              time: article.createdAt
             })
           })
 

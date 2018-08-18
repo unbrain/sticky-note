@@ -4,42 +4,72 @@ var Note = require('../model/note').Note
 
 /* GET listing. */
 router.get('/notes', function (req, res, next) {
-  Note.findAll({
+  var opts = {
     raw: true
-  }).then((note) => {
+  }
+  if (req.session && req.session.user) {
+    opts.where = {
+      username: req.session.user.username
+    }
+  }
+
+  Note.findAll(opts).then(function (notes) {
+    console.log(notes)
     res.send({
       status: 0,
-      data: note
+      data: notes
+    })
+  }).catch(function () {
+    res.send({
+      status: 1,
+      errorMsg: '数据库异常'
     })
   })
-});
+})
 
 /* POST listing. */
 router.post('/notes/add', (req, res, next) => {
-  if (!req.session.user) {
-    return res.send({
-      status: 1,
-      errorMsg: '请先登录'
+  if (!req.session || !req.session.user) {
+    return Note.create({
+      text: req.body.note,
+      username: '游客'
+    }).then(function () {
+      console.log(arguments)
+      res.send({
+        status: 0
+      })
+    }).catch(function () {
+      res.send({
+        status: 1,
+        errorMsg: '数据库异常或者你没有权限'
+      });
     })
   }
-  let note = req.body.note
-  let username = req.session.user.username
+  if (!req.body.note) {
+    return res.send({
+      status: 2,
+      errorMsg: '内容不能为空'
+    });
+  }
+  var note = req.body.note;
+  var username = req.session.user.username;
   console.log({
     text: note,
     username: username
   })
   Note.create({
     text: note,
-    username
-  }).then(() => {
+    username: username
+  }).then(function () {
+    console.log(arguments)
     res.send({
       status: 0
     })
-  }).catch(() => {
+  }).catch(function () {
     res.send({
       status: 1,
-      errorMsg: '数据库出错'
-    })
+      errorMsg: '数据库异常或者你没有权限'
+    });
   })
 });
 

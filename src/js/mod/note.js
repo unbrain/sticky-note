@@ -1,4 +1,5 @@
 require('less/note.less')
+require('masonry-layout/dist/masonry.pkgd.min')
 
 var Toast = require('./toast').Toast
 var EventHub = require('./eventHub')
@@ -11,14 +12,23 @@ function Note(opts) {
 }
 
 Note.prototype = {
+  // colors: [
+  //   ['#ea9b35', '#efb04e'], // headColor, containerColor
+  //   ['#dd598b', '#e672a2'],
+  //   ['#eee34b', '#f2eb67'],
+  //   ['#c24226', '#d15a39'],
+  //   ['#c1c341', '#d0d25c'],
+  //   ['#3f78c3', '#5591d2']
+  // ],
   colors: [
-    ['#ea9b35', '#efb04e'], // headColor, containerColor
-    ['#dd598b', '#e672a2'],
-    ['#eee34b', '#f2eb67'],
-    ['#c24226', '#d15a39'],
-    ['#c1c341', '#d0d25c'],
-    ['#3f78c3', '#5591d2']
+    ['#fff', '#fff'], // headColor, containerColor
+    ['#fff', '#fff'],
+    ['#fff', '#fff'],
+    ['#fff', '#fff'],
+    ['#fff', '#fff'],
+    ['#fff', '#fff']
   ],
+
 
   defaultOpts: {
     id: '',
@@ -31,26 +41,46 @@ Note.prototype = {
     if (this.opts.id) {
       this.id = this.opts.id
     }
+  
+    time = this.opts.time ? new Date(this.opts.time) : new Date()
+    this.opts.username = this.opts.username ? this.opts.username : '游客'
+    this.opts.time = time.toLocaleDateString().replace(/(\w*)(\/)(\w*)(\/)(\w*)/,(m,o,t,th,f,fi)=> `${o}年${th}月${fi}日`)
+    $('.grid').masonry({
+      // options
+      itemSelector: '.grid-item',
+      columnWidth: 20,
+      gutter: 10,
+      horizontalOrder: true
+    });
   },
 
   createNote() {
     let template = `
-    <div class="note">
+    <div class="note grid-item">
       <div class="note-head">
-        <span class="username">
+        <span class="time">
         </span>
-        <span class="delete">&times;
+        <span class="delete"><i class="grey big remove icon"></i>
         </span>
       </div>
+      <div class="ui clearing divider"></div>
       <div class="note-ct" contenteditable="true">
       </div>
+      <div class="ui clearing divider"></div>
+      <a class="ui label black" >
+        <span class="name"></span>
+      </a>
     </div>`
+
     this.$note = $(template)
-    this.$note.find('.note-ct').text(this.opts.context)
-    this.$note.find('.username').text(this.opts.username)
-    this.opts.$ct.append(this.$note)
-    if (!$.id) this.$note.css('bottom', '10px')
+    this.$note.find('.note-ct').html(this.opts.context)
+    this.$note.find('.time').text(this.opts.time)
+    this.$note.find('.name').text(this.opts.username)
+    $('.grid').append(this.$note).masonry('appended', this.$note)
+    // if (!$.id) this.$note.css('bottom', '10px')
   },
+
+
 
   setStyle() {
     let color = this.colors[Math.floor(Math.random() * 6)]
@@ -125,12 +155,14 @@ Note.prototype = {
   },
 
   add(msg) {
-    $.post('/api/notes/add', {note: msg})
+    $.post('/api/notes/add', {
+        note: msg
+      })
       .done((ret) => {
-        if(ret.status === 0){
+        if (ret.status === 0) {
           Toast('add success');
-          
-        }else{
+
+        } else {
           this.$note.remove();
           EventHub.emit('waterfall')
           Toast(ret.errorMsg);
@@ -145,8 +177,10 @@ Note.prototype = {
       })
       .done((ret) => {
         if (ret.status === 0) {
-          Toast('delete success');
-          this.$note.remove()
+          Toast('delete success')
+          $('.grid').masonry('remove', this.$note)
+            // layout remaining item elements
+            .masonry('layout')
           EventHub.emit('waterfall')
         } else {
           Toast(ret.errorMsg)

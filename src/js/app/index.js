@@ -4,7 +4,7 @@ var WaterFall = require('mod/waterfall');
 
 NoteManager.load();
 
-$('.add-note').on('click', function () {
+$('#addmy').on('click', function () {
   NoteManager.add();
 })
 

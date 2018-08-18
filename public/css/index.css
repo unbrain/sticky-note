@@ -1,53 +1,71 @@
 html,
 body {
-  margin: 0;
   height: 100%;
+  overflow: auto;
+  background: rgb(246, 248, 250);
+  font: 14px/1.4 'Arial';
 }
+
+.grid-item {
+  /* float: left; */
+  width: 20%;
+  border: 1px solid hsla(0, 99%, 99%, 0.5);
+}
+
+.avatar {
+  border-radius: 3px;
+  width: 36px;
+  height: 36px;
+}
+
 ul,
 li {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-body {
-  font: 14px/1.4 'Arial';
-}
+
 a {
   text-decoration: none;
-  color: #fff;
 }
+
 #header {
-  height: 30px;
+  width: 100%;
+  padding: 24px 36px;
   font-size: 12px;
+  background-color: #fff;
+  box-shadow: 10px 10px 10px -6px rgba(0, 0, 0, 0.22);
 }
+
 #header a {
   display: block;
   font-size: 12px;
-  margin-top: 6px;
 }
+
 #header .user-area {
   padding-right: 16px;
   float: right;
 }
+
 #header .user-area li {
   float: left;
   margin-left: 5px;
 }
+
 #header .user-area li span {
   color: #fff;
   display: block;
   margin-top: 6px;
 }
-#header .user-area img {
-  height: 18px;
-  margin-top: 5px;
-  border-radius: 50%;
-}
+
+
+
 #header .setting {
   float: right;
   margin-left: 9px;
   display: none;
 }
+
 #header .add-note {
   float: left;
   margin-left: 16px;
@@ -55,14 +73,17 @@ a {
   border-radius: 4px;
   padding: 2px 4px;
 }
+
 #header .login {
   float: right;
   margin-left: 16px;
 }
+
 #content {
   position: relative;
   height: calc(70%);
 }
+
 @-webkit-keyframes move-twink-back {
   from {
     background-position: 0 0;
@@ -71,6 +92,7 @@ a {
     background-position: -10000px 5000px;
   }
 }
+
 @keyframes move-twink-back {
   from {
     background-position: 0 0;
@@ -79,6 +101,7 @@ a {
     background-position: -10000px 5000px;
   }
 }
+
 .stars,
 .twinkling {
   position: absolute;
@@ -90,17 +113,20 @@ a {
   height: 100%;
   display: block;
 }
-.stars {
+
+/* .stars {
   background: #000 url(http://7xpvnv.com2.z0.glb.qiniucdn.com/ba25c630-1c91-4ac1-a3de-65555d78c147.png) repeat top center;
   z-index: -2;
-}
+} */
+
 .twinkling {
   background: transparent url(http://7xpvnv.com2.z0.glb.qiniucdn.com/493b97e6-c499-4b41-a26b-8942873615b0.png) repeat top center;
   z-index: -1;
   -webkit-animation: move-twink-back 200s linear infinite;
   animation: move-twink-back 200s linear infinite;
 }
-.toast {
+
+/* .toast {
   position: fixed;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -113,6 +139,7 @@ a {
   box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.6);
   display: none;
 }
+
 .note {
   position: absolute;
   color: #333;
@@ -121,6 +148,7 @@ a {
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
+
 .note .note-head {
   height: 20px;
   background-color: #ea9b35;
@@ -130,9 +158,11 @@ a {
   padding-left: 10px;
   color: #666;
 }
+
 .note .note-head:hover .delete {
   opacity: 1;
 }
+
 .note .note-head:before {
   position: absolute;
   left: 50%;
@@ -144,6 +174,7 @@ a {
   height: 18px;
   background: #35bba3;
 }
+
 .note .note-head:after {
   position: absolute;
   left: 50%;
@@ -157,11 +188,13 @@ a {
   border-left: 5px solid #299683;
   border-top: 18px solid transparent;
 }
+
 .note .note-ct {
   padding: 10px;
   background-color: #efb04e;
   outline: none;
 }
+
 .note .delete {
   position: absolute;
   top: 4px;
@@ -172,10 +205,50 @@ a {
   opacity: 0;
   -webkit-transition: opacity .3s;
   transition: opacity .3s;
-}
-.draggable {
+} */
+
+/* .draggable {
   opacity: 0.8;
   cursor: move;
   -webkit-transition: none;
   transition: none;
+} */
+
+/* ---------- nav ---------- */
+
+.nav {
+  margin-bottom: 20px;
+  color: #999;
+  text-align: center;
+}
+
+.nav h1 {
+  color: #4fc08d;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+/* ---------- nav-setting ---------- */
+
+.nav-setting {
+  position: fixed;
+  right: 30px;
+  top: 35px;
+  z-index: 999;
+}
+
+.nav-setting .ui.dropdown.button {
+  padding: 10px 10px 0 10px;
+  background-color: #fff !important;
+}
+
+.nav-setting .icon.bars {
+  color: #000;
+  font-size: 18px;
+}
+
+#content{
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }

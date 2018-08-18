@@ -4,30 +4,53 @@
     <meta charset="utf-8">
     <meta property="qc:admins" content="4562636714562571563145" />
     <title>便利贴</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
     <link rel="stylesheet" href="/css/index.css">
+    
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
   </head>
   <body>
     <div id="header">
-      <a class="add-note" title="添加笔记" href="#"><span class="fa fa-plus"></span> 添加</a>
+      <div class="ui animated button" id="addmy" tabindex="0">
+        <div class="visible content">添加</div>
+        <div class="hidden content">
+          <i class="plus icon"></i>
+        </div>
+      </div>
       <ul class="user-area">
-       <% if (isLogin){ %>
-          <li><img src="<%= user.avatar %>" alt=""></li>
-          <li><span title="<%= user.username %>"><%= user.username %></span></li>
-          <li><span class="line"> | </span> </li>
-          <li><a class="logout" href="/auth/logout">注销</a></li>
+        <% if (isLogin){ %>
+        <div class="ui label">
+          <a class="ui image label" href="/auth/logout">
+            <img src="<%= user.avatar %>"> 
+            <span title="<%= user.username %>"><%= user.username %></span>
+            <div class="detail"><i class="sign out icon"></i></div>
+          </a>
+        </div>
+        
+
         <%} else { %>
-          <li><a class="login" title="GitHub登录" href="/auth/github"> GitHub登录</a>
+          <li>
+          <a class="login" title="GitHub登录" href="/auth/github">
+          <div class="ui left labeled button" tabindex="0">
+            <i class="ui basic right pointing label">
+              登录
+            </i>
+            <div class="ui button">
+              <i class="github icon"></i> GitHub
+            </div>
+          </div>  
+           </a>
           </li>
         <% } %>
       </ul>
 
     </div>
-    <div id="content">
+    <div id="content" class="grid">
 
     </div>
 
-    <div class="stars"></div>
     <script src="/js/index.js"></script>
-<!--     <div class="twinkling"></div> -->
+
   </body>
 </html>
