@@ -1,6 +1,4 @@
-
-
-<center># 便利贴</center>
+# <p align="center">便利贴</p>
 
 ## 技术栈
 
