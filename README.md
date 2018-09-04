@@ -1,8 +1,17 @@
-# <p align="center">便利贴</p>
+# <p align="center">[简贴](snote.liuzhaoyang.space)</p>
+
+## 项目介绍
+
+`HTML` 使用了 `ejs`，`CSS` 使用了 `Less` ，`JavaScript` 使用了 `jQuery` ，`node` 端使用 `express`来促进开发，使用 `webpack` 进行打包，存储数据用的 `sqlite`，登录管理是使用的 `GitHub` 提供的 `OAuth Apps`。本来自己也用 `JavaScript` 实现了一个简单的瀑布流后改用 `masonry-layout`。通过这个项目对前后端的联调认识更加深入，后面通过 `pm2` `nginx` 部署在自己的服务器上。
 
 ## 技术栈
 
-express less webpack jQuery sqlite
+- express 
+- less 
+- webpack 
+- jQuery 
+- sqlite
+- masonry-layout
 
 ## 项目初始化
 
