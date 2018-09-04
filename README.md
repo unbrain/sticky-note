@@ -1,4 +1,4 @@
-# <p align="center">[简贴](snote.liuzhaoyang.space)</p>
+# <p align="center">[简贴](http://snote.liuzhaoyang.space)</p>
 
 ## 项目介绍
 
