@@ -1,3 +1,4 @@
+<p align="center">![](./notes.png)</p>
 # <p align="center">[简贴](http://snote.liuzhaoyang.space)</p>
 
 ## 项目介绍
