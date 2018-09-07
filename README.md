@@ -1,4 +1,4 @@
-![](./notes.png)
+<p align="center"> <img src="./notes.png"> </p>
 
 
 # <p align="center">[简贴](http://snote.liuzhaoyang.space)</p>
